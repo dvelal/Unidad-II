@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include<vector>
+#include<Receta.h>
 class Producto{
     protected:
         int idProducto;
