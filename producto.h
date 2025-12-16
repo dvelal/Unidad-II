@@ -1,27 +1,43 @@
 #pragma once
 #include<iostream>
 #include<vector>
-#include<Receta.h>
+#include<iomanip>
+#include"Receta.h"
+
 class Producto{
     protected:
-        int idProducto;
+        std::string idProducto;
         std::string nombre;
         int stockActual;
         int stockMinimo;
     public:
         Producto();
-        virtual void actualizarStock(int) = 0;
-        bool estaBajoMinimo();
-        void mostrarDatos();
-        int getStock();
-        int getIdProducto();
+        virtual ~Producto() = default;
+        Producto(std::string n, int sa, int sm);
+        //getters
+        int getStockActual();
+        int getStockMinimo();
+        std::string getIdProducto();
         std::string getNombre();
+        //setters
+        virtual void actualizarStock(int) = 0;
+        virtual char prefijoId() = 0;
+        void setId(std::string id);
+        //indicadores
+        bool estaBajoMinimo();
+        virtual void mostrarDatos();
+        
 };
 Producto::Producto(){
-    idProducto=-1;
+    idProducto="000";
     nombre = "No hay nombre disponible";
     stockActual = 0;
     stockMinimo = 0;
+}
+Producto::Producto(std::string n, int sa, int sm){
+    nombre = n;
+    stockActual = sa;
+    stockMinimo = sm;
 }
 bool Producto::estaBajoMinimo(){
     if(stockActual < stockMinimo)
@@ -30,97 +46,96 @@ bool Producto::estaBajoMinimo(){
 }
 void Producto::mostrarDatos(){
     std::cout<<"ID: "<<idProducto;
-    std::cout<<"\nProducto: "<<nombre;
-    std::cout<<"\nStock "<<stockActual<<std::endl;
+    std::cout<<std::left<<" Producto: "<<std::setw(20)<<nombre;
+    std::cout<<"  Stock: "<<std::setw(5)<<stockActual;;
     if(estaBajoMinimo()){
-        std::cout<<"\tHay que reponer el producto"<<std::endl;
+        std::cout<<"\tHay que reponer el producto";
     }
 }
-int Producto::getStock(){
+int Producto::getStockActual(){
     return stockActual;
 }
-int Producto::getIdProducto(){
+int Producto::getStockMinimo(){
+    return stockMinimo;
+}
+std::string Producto::getIdProducto(){
     return idProducto;
 }
 std::string Producto::getNombre(){
     return nombre;
 }
-
-class Torta : public Producto{
-    private: 
-        int maxPorciones;
-        float precio;
-        //Receta * receta;
-    public:
-        Torta();
-        Torta(int, std::string nombre);
-        void venderTorta(int);
-        void actualizarStock(int cant);
-        void mostrarDatos();
-};
-Torta::Torta()
-:Producto::Producto()
-{
-    maxPorciones = 0;
-    precio = 0;
-}
-Torta::Torta(int id,std::string n)
-:Producto::Producto(){
+void Producto::setId(std::string id){
     idProducto = id;
-    nombre= n;
 }
-void Torta::actualizarStock(int cant){
-    //hornearTorta() o algo parecido para descontar los insumos
-    stockActual = cant;
-}
-void Torta::mostrarDatos(){
-    Producto::mostrarDatos();
-    std::cout<<"N de porciones: "<<maxPorciones;
-    std::cout<<"\nPrecio: " << precio<<std::endl;
-}
+
+#include<map>
+#include<sstream>
 
 class Inventario{
     private:
-        std::vector<Producto*> productos;
+        std::map<std::string,Producto*> productos;
+        std::map<char,int> contadores;
+        std::string formatearId(int n);
     public:
         
         ~Inventario();
         void agregarProducto(Producto*);
-        void actualizarStock();
-        Producto* buscarPorId(int id);
-        void venderProducto(int , int );
+        void actualizarStock(std::string id, int cant);
+        Producto* buscarPorId(std::string id);
+        void venderProducto(std::string id , int );
         void mostrarProductos();
-        void cargarDesdeArchivo(const std::string&);
-        void guardarEnArchivo(const std::string&);
+        void cargarProductos(const std::string&);
+        void guardarProductos(const std::string&);
 };
 
 Inventario::~Inventario() {
-    for (auto p : productos)
-        delete p;
+    for (auto &p : productos)
+        delete p.second;
 }
-void Inventario::agregarProducto(Producto * p){
-    productos.push_back(p);
+std::string Inventario::formatearId(int n){
+    std::stringstream ss;
+    ss<< std::setw(3) << std::setfill('0') << n;
+    return ss.str();
 }
-Producto* Inventario::buscarPorId(int id){
-    for(auto &p: productos){
-        if(p->getIdProducto()== id)
-            return p;
+void Inventario::agregarProducto(Producto * p){//supongamos que no se duplican los productos
+    char pref = p->prefijoId();
+    int &contador= contadores[pref];
+    contador++;
+    std::string id= std::string(1,pref) + formatearId(contador);
+    p->setId(id);
+    productos[id]=p;
+}
+Producto* Inventario::buscarPorId(std::string id){
+    auto it = productos.find(id);
+    if (it !=productos.end()) return it->second;
+    else return nullptr;
+}
+//corregir, ya que venderProducto supone torta::actualizar stcok
+//como directo, y actualizarstock supone un actualizar por suma
+void Inventario::actualizarStock(std::string id, int cant){ //falta implementar
+    Producto * p = buscarPorId(id);
+    if(p){
+        p->actualizarStock(cant);
     }
-    return nullptr;
-}
-void Inventario::venderProducto(int id, int cantidad){
-    Producto* p = buscarPorId(id);
-    if (p){
-        p->actualizarStock(p->getStock() - cantidad);
+    if(!p){
+        std::cout<<"No existe el producto"<<std::endl;
     }
+}
+void Inventario::venderProducto(std::string id, int cantidad){
+    Producto* p = buscarPorId(id);  
     if (!p){
         std::cout<<"Producto no encontrado"<<std::endl;
+        return;
     }
+    if(cantidad <= 0){
+        std::cout<<"Cantidad invalida\n";
+        return;
+    }
+    p->actualizarStock(-cantidad);
 }
 void Inventario::mostrarProductos(){
-    std::string nombre;
-    for(auto &p : productos){
-        nombre=p->getNombre();
+    for(auto &par : productos){
+        par.second->mostrarDatos();
     }
 }
 
