@@ -1,0 +1,5 @@
+Harina 0
+Azucar 10
+Levadura 8
+Sal 9.6
+Agua 6
