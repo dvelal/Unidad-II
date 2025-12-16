@@ -36,7 +36,6 @@ float Insumo :: getStock() const {
 
 bool Insumo :: consumir(float cantidad){
     if(stock < cantidad){
-        cout << "No hay insumos suficientes\n";
         return false;
     } else {
         stock = stock - cantidad;
@@ -53,6 +52,7 @@ class Almacen {
         vector<Insumo> insumos;
     public:
         void cargarBase();
+        void guardarBase();
         bool hayStock(const string& nombreInsumo, float cantidad) const;
         bool descontar(const string& nombreInsumo, float cantidad);
 };
@@ -72,18 +72,29 @@ void Almacen :: cargarBase(){
     }
 }
 
+void Almacen::guardarBase() {
+    ofstream archivo("Insumos.txt");
+    if (!archivo.is_open()) {
+        cout << "No se pudo guardar el archivo de insumos\n";
+        return;
+    }
+    for (const Insumo& insumo : insumos) {
+        archivo << insumo.getNombre() << " " 
+                << insumo.getStock() << endl;
+    }
+    archivo.close();
+}
+
 bool Almacen :: hayStock(const string& nombreInsumo, float cantidad) const {
     for (const Insumo& insumo : insumos){
         if(insumo.getNombre() == nombreInsumo){
             if (insumo.getStock() >= cantidad){
                 return true;
             } else {
-                cout << "No hay suficiente insumos\n";
                 return false;
             }
         }
     }
-    cout << "No existe el insumo\n";
     return false;
 }
 
@@ -119,7 +130,6 @@ bool Receta :: cargarDefinicion(const string& archivoReceta){
         receta.close();
         return true;
     } else {
-        cout << "No se encontro receta";
         return false;
     }
 }
