@@ -53,6 +53,7 @@ class Almacen {
     public:
         void cargarBase();
         void guardarBase();
+        void mostrarInsumos();
         bool hayStock(const string& nombreInsumo, float cantidad) const;
         bool descontar(const string& nombreInsumo, float cantidad);
 };
@@ -68,7 +69,7 @@ void Almacen :: cargarBase(){
         }
         Insumos.close();
     } else {
-        cout << "No se puedo abrir el archivo\n";
+        cout << "No se puedo abrir el archivo de insumos\n";
     }
 }
 
@@ -79,10 +80,16 @@ void Almacen::guardarBase() {
         return;
     }
     for (const Insumo& insumo : insumos) {
-        archivo << insumo.getNombre() << " " 
-                << insumo.getStock() << endl;
+        archivo << insumo.getNombre() << " " << insumo.getStock() << endl;
     }
     archivo.close();
+}
+
+void Almacen :: mostrarInsumos() {
+    cout << "Lista de Insumos: \n";
+    for(const Insumo& insumo : insumos){
+        cout << "\t" << insumo.getNombre() << " " << insumo.getStock() << endl;
+    }
 }
 
 bool Almacen :: hayStock(const string& nombreInsumo, float cantidad) const {
@@ -120,7 +127,8 @@ class Receta {
 Receta :: Receta(const string& nombreProducto) : nombreProducto(nombreProducto) {}
 
 bool Receta :: cargarDefinicion(const string& archivoReceta){
-    ifstream receta(archivoReceta);
+    string ruta = "RECETAS/" + archivoReceta;
+    ifstream receta(ruta);
     if(receta.is_open()){
         items.clear();
         ItemReceta item;
