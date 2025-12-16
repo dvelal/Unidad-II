@@ -1,5 +1,11 @@
-Harina 0
-Azucar 10
-Levadura 8
-Sal 9.6
-Agua 6
+Harina 5 kg
+Azucar 20 kg
+Sal 2.8 kg
+Cacao 8 kg
+Cafe 6 kg
+Arroz 50 kg
+Avena 15 kg
+Levadura 11 kg
+Maicena 10 kg
+Canela 1 kg
+Agua 5 L
