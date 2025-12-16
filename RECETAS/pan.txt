@@ -1,0 +1,4 @@
+Harina 2.5
+Agua 1
+Levadura 0.5
+Sal 0.1
