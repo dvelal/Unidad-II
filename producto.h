@@ -13,7 +13,7 @@ class Producto{
     public:
         Producto();
         virtual ~Producto() = default;
-        Producto(std::string n, int sa, int sm);
+        Producto(std::string n, int sa, int sm); 
         //getters
         int getStockActual();
         int getStockMinimo();
@@ -86,6 +86,7 @@ class Inventario{
         void mostrarProductos();
         void cargarProductos(const std::string&);
         void guardarProductos(const std::string&);
+        //Producto* accederProductoPorId(std::string id);
 };
 
 Inventario::~Inventario() {
@@ -110,15 +111,13 @@ Producto* Inventario::buscarPorId(std::string id){
     if (it !=productos.end()) return it->second;
     else return nullptr;
 }
+
 //corregir, ya que venderProducto supone torta::actualizar stcok
 //como directo, y actualizarstock supone un actualizar por suma
 void Inventario::actualizarStock(std::string id, int cant){ //falta implementar
     Producto * p = buscarPorId(id);
     if(p){
         p->actualizarStock(cant);
-    }
-    if(!p){
-        std::cout<<"No existe el producto"<<std::endl;
     }
 }
 void Inventario::venderProducto(std::string id, int cantidad){

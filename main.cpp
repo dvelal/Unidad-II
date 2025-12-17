@@ -26,8 +26,17 @@ int main(){
                 cin>>opt2;
                 switch(opt2){
                     case 'a':
-                        Torta tortaDeChocolate;
-                        inventario.agregarProducto(&tortaDeChocolate);
+                        std::string nombre; 
+                        int sa,sm,mp;
+                        float p;
+                        cout<<"Ingrese el nombre del producto:\n";
+                        cin.ignore();
+                        getline(cin,nombre);
+                        std::cout<<"Ingrese el Stock Actual: "; std::cin>>sa;
+                        std::cout<<"Ingrese el Stock Minimo: "; std::cin>>sm;
+                        std::cout<<"Ingrese el tamaño de la torta en porciones: "; std::cin>>mp;
+                        std::cout<<"Ingrese el precio de la torta: ";std::cin>>p;
+                        inventario.agregarProducto(new Torta(nombre,sa,sm,mp,p));
                     break;
                 }
                 break;
@@ -46,7 +55,7 @@ int main(){
 
                 Producto *p = inventario.buscarPorId(id);
                 if(!p){
-                    "El producto no existe";
+                    std::cout<<"El producto no existe";
                     break;
                 }
                 p->mostrarDatos();
