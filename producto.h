@@ -118,6 +118,7 @@ class Inventario{
         ~Inventario();
         Producto* agregarProducto(Producto*); //agrega un producto nuevo con stock 0
         void actualizarStock(std::string id, int cant);//actualiza el stock sin consumir insumos, osea mas para leer
+        void producir(std::string id,int cant,Almacen& almacen);
         Producto* buscarPorId(std::string id);
         void venderProducto(std::string id , int );
         void mostrarProductos();
@@ -157,6 +158,12 @@ void Inventario::actualizarStock(std::string id, int cant){
     Producto * p = buscarPorId(id);
     if(p){
         p->actualizarStock(cant);
+    }
+}
+void Inventario::producir(std::string id,int cant,Almacen& almacen){
+    Producto *p = buscarPorId(id);
+    if(p){
+        p->producir(cant,almacen);
     }
 }
 void Inventario::venderProducto(std::string id, int cantidad){
