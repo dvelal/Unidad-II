@@ -1,3 +1,4 @@
+1
 T 2
-T001 ¤laskdj¤flkj 2 3 4 1.000000
-T002 sldkfjsd 0 14 53 4.000000
+T001,Torta de chocolate,10,3,10,40.000000
+T002,Torta de 3 leches,10,3,10,40.000000

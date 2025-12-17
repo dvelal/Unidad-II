@@ -5,6 +5,7 @@
 #include<sstream>
 #include"Receta.h"
 
+
 class Producto{
     protected:
         std::string nombre;
@@ -28,6 +29,9 @@ class Producto{
         bool estaBajoMinimo();
         virtual void mostrarDatos();
         virtual std::string ssdatos();
+        //lectura
+        virtual void cargarDesdeStream(std::stringstream &ss)=0;
+        
         
 };
 Producto::Producto(){
@@ -80,7 +84,7 @@ std::string Producto::ssdatos(){
 
 #include<map>
 #include<fstream>
-
+#include"Torta.h"
 
 class Inventario{
     private:
@@ -96,7 +100,7 @@ class Inventario{
         void venderProducto(std::string id , int );
         void mostrarProductos();
         void guardarProductos();
-        void cargarProductos(const std::string&);
+        void cargarProductos();
         //Producto* accederProductoPorId(std::string id);
 };
 
@@ -165,21 +169,32 @@ void Inventario::cargarProductos(){
         char indice;
         int cant;
         leer>>indice;
-        leer>>cantidad;
-        contadores[indice] = cantidad;
+        leer>>cant;
+        contadores[indice] = cant;
     }
-    //leer los productos
-    std::string id;
-    while(leer>>id){
-        if(id[0]=='T'){ //el producto es una torta
-            std::string nombre;
-            int stockActual,stockMinimo, maxPorciones;
-            float precio; 
-            leer>>nombre
-        }
-        //agregar mas condiciones por productos
+   // leer productos (una liea es un producto)
+    std::string linea;
+    while (std::getline(leer, linea)) {
+
+        if (linea.empty()) continue;
+
+        std::stringstream ss(linea);
+        std::string id;
+        std::getline(ss, id, ',');
+        //un if por cada tipo de producto
+        Producto * p = nullptr;
+        if (id[0] == 'T') 
+            p = new Torta();
+        
+        p->setId(id);
+        p->cargarDesdeStream(ss);
+        productos[id]=p;
+            
     }
+    leer.close();
 }
+
+    
 void Inventario::guardarProductos(){
     std::ofstream guardar;
     guardar.open("Productos.txt",std::ios::out);

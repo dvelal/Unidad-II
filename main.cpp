@@ -5,7 +5,7 @@
 #include"Torta.h"
 int main(){
     Inventario inventario;
-    //inventario.cargarProductos();//leer los productos del inventario
+    inventario.cargarProductos();//leer los productos del inventario
     bool close = false;
     do{
         std::cout<<"Escoge una opción: "<<std::endl;
