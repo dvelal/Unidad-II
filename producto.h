@@ -6,6 +6,7 @@
 #include"Receta.h"
 
 
+
 class Producto{
     protected:
         std::string nombre;
@@ -27,8 +28,11 @@ class Producto{
         void setId(std::string id);
         //indicadores
         bool estaBajoMinimo();
+        //metodos
         virtual void mostrarDatos();
         virtual std::string ssdatos();
+        int producir(int cant, Almacen& almacen);
+        
         //lectura
         virtual void cargarDesdeStream(std::stringstream &ss)=0;
         
@@ -81,6 +85,24 @@ std::string Producto::ssdatos(){
     std::to_string(stockMinimo);
     return datos;
 }
+int Producto::producir(int cant, Almacen& almacen){
+    Receta recet(nombre);
+    int c = 0;
+    if(recet.cargarDefinicion()){
+        for(int i = 0; i < cant; i++){
+            if(recet.producir(almacen)){
+                stockActual++;
+                c++;
+            } else {
+                break;
+            }
+        }
+    } else {
+        cout << "No se encontro Receta" << endl;
+    }
+    return c;
+};
+
 
 #include<map>
 #include<fstream>
@@ -94,8 +116,8 @@ class Inventario{
     public:
         
         ~Inventario();
-        Producto* agregarProducto(Producto*);
-        void actualizarStock(std::string id, int cant);
+        Producto* agregarProducto(Producto*); //agrega un producto nuevo con stock 0
+        void actualizarStock(std::string id, int cant);//actualiza el stock sin consumir insumos, osea mas para leer
         Producto* buscarPorId(std::string id);
         void venderProducto(std::string id , int );
         void mostrarProductos();
