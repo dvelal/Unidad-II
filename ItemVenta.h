@@ -1,3 +1,4 @@
+#include"Producto.h"
 class ItemVenta {
     private:
         Producto producto;
