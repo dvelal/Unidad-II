@@ -1,8 +1,10 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <iomanip>
 using namespace std;
 
 struct ItemReceta {
@@ -95,7 +97,8 @@ void Almacen :: guardarBase() {
 void Almacen :: mostrarInsumos() {
     cout << "Lista de Insumos: \n";
     for(const Insumo& insumo : insumos){
-        cout << "\t" << insumo.getNombre() << " " << insumo.getStock() << " " << insumo.getUnidad() << endl;
+        cout << "\t";
+        cout << left << setw(20) << insumo.getNombre() << left << setw(4) << insumo.getStock() << left << setw(4) << insumo.getUnidad() << endl;
     }
 }
 

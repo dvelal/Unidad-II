@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include "Receta.h"
+#include "Producto.h"
 using namespace std;
 
 int main() {
@@ -13,18 +14,16 @@ int main() {
     almacen.cargarBase();
     almacen.mostrarInsumos();
     // Crear receta (el nombre es solo informativo)
-    string nome;
-    cin >> nome;
-    Receta receta(nome);
-    /*for(int i = 0; i < 2; i++){
-        string in; float can; string uni;
-        cin >> in >> can >> uni;
-        receta.agregarInsumo(in, can, uni);
-    }
-    receta.crearReceta();*/
+
+    int c;
+    int cant;
+    cin >> cant;
+    Torta recet("Tchocolate", 0, 2, 8, 10);
+    c = recet.producir(cant, almacen);
+    cout << c << endl;
 
     // Cargar definición de la receta desde archivo
-    if (!receta.cargarDefinicion()) {
+    /*if (!receta.cargarDefinicion()) {
         cout << "Error al cargar la receta\n";
         return 1;
     }
@@ -40,7 +39,7 @@ int main() {
         cin >> insumo;
         cin >> rep;
         almacen.reponerInsumos(insumo, rep);
-    }
+    }*/
     almacen.mostrarInsumos();
     almacen.guardarBase();
     return 0;
