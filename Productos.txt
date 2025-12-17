@@ -1,4 +1,4 @@
 1
 T 2
-T001,Torta de chocolate,10,3,10,40.000000
+T001,Torta de chocolate,13,3,10,40.000000
 T002,Torta de 3 leches,10,3,10,40.000000
