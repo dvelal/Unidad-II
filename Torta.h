@@ -3,11 +3,12 @@
 class Torta : public Producto{
     private: 
         int maxPorciones;
-        float precio;
+        
         //Receta * receta;
     public:
         Torta();
         Torta(std::string n, int sa, int sm,int mp, float p);
+        int getMaxPorciones();
         void venderTorta(int);
         void actualizarStock(int cant);
         void mostrarDatos();
@@ -27,6 +28,9 @@ Torta::Torta(std::string n, int sa, int sm, int mp, float p)
 :Producto::Producto(n,sa,sm){
     maxPorciones = mp;
     precio = p;
+}
+int Torta::getMaxPorciones(){
+    return maxPorciones;
 }
 
 void Torta::actualizarStock(int cant){

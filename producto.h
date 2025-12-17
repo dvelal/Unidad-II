@@ -13,6 +13,7 @@ class Producto{
         std::string idProducto;
         int stockActual;
         int stockMinimo;
+        float precio;
     public:
         Producto();
         virtual ~Producto() = default;
@@ -20,6 +21,7 @@ class Producto{
         //getters
         int getStockActual();
         int getStockMinimo();
+        float getPrecio();
         std::string getIdProducto();
         std::string getNombre();
         //setters
@@ -67,6 +69,9 @@ int Producto::getStockActual(){
 }
 int Producto::getStockMinimo(){
     return stockMinimo;
+}
+float Producto::getPrecio(){
+    return precio;
 }
 std::string Producto::getIdProducto(){
     return idProducto;
