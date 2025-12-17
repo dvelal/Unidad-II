@@ -15,6 +15,7 @@ class Torta : public Producto{
         std::string ssdatos();
         //leer
         void cargarDesdeStream(std::stringstream &ss);
+        int producir(int cant, Almacen& almacen);
 };
 Torta::Torta()
 :Producto::Producto()
@@ -63,3 +64,20 @@ void Torta::cargarDesdeStream(std::stringstream &ss){
     std::getline(ss,token,',');
     precio = std::stof(token);
 }
+int Torta::producir(int cant, Almacen& almacen){
+    Receta recet(nombre);
+    int c = 0;
+    if(recet.cargarDefinicion()){
+        for(int i = 0; i < cant; i++){
+            if(recet.producir(almacen)){
+                stockActual++;
+                c++;
+            } else {
+                break;
+            }
+        }
+    } else {
+        cout << "No se encontro Receta" << endl;
+    }
+    return c;
+};
