@@ -1,6 +1,7 @@
 #include<string>
 #include <vector>
 #include<Producto.h>
+#include<ItemVenta.h>
 
 class Venta {
 private:
