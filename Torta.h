@@ -12,6 +12,7 @@ class Torta : public Producto{
         void actualizarStock(int cant);
         void mostrarDatos();
         char prefijoId() {return 'T';}
+        std::string ssdatos();
 };
 Torta::Torta()
 :Producto::Producto()
@@ -32,4 +33,12 @@ void Torta::mostrarDatos(){
     Producto::mostrarDatos();
     std::cout<<" N de porciones: "<<maxPorciones;
     std::cout<<" Precio: " << precio<<std::endl;
+}
+
+std::string Torta::ssdatos(){
+    std::string datos;
+    datos = Producto::ssdatos() + " " +
+    std::to_string(maxPorciones) + " " +
+    std::to_string(precio);
+    return datos;
 }

@@ -27,16 +27,17 @@ int main(){
                 switch(opt2){
                     case 'a':
                         std::string nombre; 
-                        int sa,sm,mp;
+                        int sm,mp;
                         float p;
                         cout<<"Ingrese el nombre del producto:\n";
                         cin.ignore();
                         getline(cin,nombre);
-                        std::cout<<"Ingrese el Stock Actual: "; std::cin>>sa;
                         std::cout<<"Ingrese el Stock Minimo: "; std::cin>>sm;
                         std::cout<<"Ingrese el tamaño de la torta en porciones: "; std::cin>>mp;
                         std::cout<<"Ingrese el precio de la torta: ";std::cin>>p;
-                        inventario.agregarProducto(new Torta(nombre,sa,sm,mp,p));
+                        Producto *pT = inventario.agregarProducto(new Torta(nombre,0,sm,mp,p));
+                        cout<<"Se creo el producto exitosamente :"<<endl;
+                        pT->mostrarDatos();
                     break;
                 }
                 break;
@@ -80,6 +81,6 @@ int main(){
         }
 
     }while(!close);
-    
+    inventario.guardarProductos();
     return 0;
 }
