@@ -37,8 +37,8 @@ void Torta::mostrarDatos(){
 
 std::string Torta::ssdatos(){
     std::string datos;
-    datos = Producto::ssdatos() + " " +
-    std::to_string(maxPorciones) + " " +
+    datos = Producto::ssdatos() + "," +
+    std::to_string(maxPorciones) + "," +
     std::to_string(precio);
     return datos;
 }

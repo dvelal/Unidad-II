@@ -71,9 +71,9 @@ void Producto::setId(std::string id){
 }
 std::string Producto::ssdatos(){
     std::string datos;
-    datos = idProducto + " " + 
-    nombre + " " + 
-    std::to_string(stockActual) + " " + 
+    datos = idProducto + "," + 
+    nombre + "," + 
+    std::to_string(stockActual) + "," + 
     std::to_string(stockMinimo);
     return datos;
 }
@@ -152,12 +152,33 @@ void Inventario::mostrarProductos(){
 }
 void Inventario::cargarProductos(){
     std::ifstream leer;
+    int cantProductos;
     leer.open("Productos.txt",std::ios::in);
     if(!leer){
         std::cout<<"No se pudo abrir el archivo"<<endl;
         return;
     }
     //leer cantidad de productos
+    leer>>cantProductos;
+    //leer contadores de productos
+    for(int i = 0;i<cantProductos;i++){
+        char indice;
+        int cant;
+        leer>>indice;
+        leer>>cantidad;
+        contadores[indice] = cantidad;
+    }
+    //leer los productos
+    std::string id;
+    while(leer>>id){
+        if(id[0]=='T'){ //el producto es una torta
+            std::string nombre;
+            int stockActual,stockMinimo, maxPorciones;
+            float precio; 
+            leer>>nombre
+        }
+        //agregar mas condiciones por productos
+    }
 }
 void Inventario::guardarProductos(){
     std::ofstream guardar;
