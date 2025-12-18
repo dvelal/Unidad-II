@@ -159,6 +159,7 @@ class Inventario{
         Producto* buscarPorId(std::string id);
         void venderProducto(std::string id , int );
         void mostrarProductos();
+        void mostrarProductosOrdenadosPorPrecio();
         void guardarProductos();
         void cargarProductos();
         void mostrarBajoMinimo();
@@ -216,6 +217,20 @@ void Inventario::venderProducto(std::string id, int cantidad){
 void Inventario::mostrarProductos(){
     for(auto &par : productos){
         par.second->mostrarDatos();
+    }
+}
+
+void Inventario::mostrarProductosOrdenadosPorPrecio(){
+    std::vector<Producto*> lista;
+    for(auto &par : productos){
+        lista.push_back(par.second);
+    }
+    std::sort(lista.begin(), lista.end(), [](Producto* a, Producto* b){
+        return a->getPrecio() < b->getPrecio();
+    });
+    std::cout << "\n--- CATALOGO ORDENADO POR PRECIO (ASC) ---" << std::endl;
+    for(auto p : lista){
+        p->mostrarDatos();
     }
 }
 void Inventario::cargarProductos(){

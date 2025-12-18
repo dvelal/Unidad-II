@@ -43,6 +43,7 @@ int main() {
         cout << " 4. Registro (Crear Nueva Receta/Producto)" << endl;
         cout << " 5. Punto de Venta (Boletas)" << endl;
         cout << " 6. Consultar Boletas Guardadas" << endl;
+        
         cout << " 0. Salir y Guardar" << endl;
         cout << "----------------------------------------" << endl;
         cout << "Seleccione una opcion: ";
@@ -71,6 +72,13 @@ int main() {
                 miInventario.mostrarProductos();
                 cout << "\n--- ALERTAS DE STOCK BAJO ---" << endl;
                 miInventario.mostrarBajoMinimo();
+
+                cout << "\n[1] Ver catalogo ordenado por precio | [0] Volver: ";
+                int op2; cin >> op2;
+                if (op2 == 1) {
+                    mostrarCabecera("CATALOGO ORDENADO POR PRECIO");
+                    miInventario.mostrarProductosOrdenadosPorPrecio();
+                }
                 pausar();
                 break;
             }
@@ -179,6 +187,8 @@ int main() {
                 pausar();
                 break;
             }
+
+            
 
             case 0:
                 mostrarCabecera("SALIENDO DEL SISTEMA");
