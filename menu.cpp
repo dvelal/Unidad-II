@@ -80,6 +80,12 @@ int main() {
                 miInventario.mostrarProductos();
                 string id; int cant;
                 cout << "\nIngrese ID del producto a hornear: "; cin >> id;
+                Producto *p = miInventario.buscarPorId(id);
+                if(!p){
+                    cout<<"No existe el ID. Cree el producto antes"<<endl;
+                    pausar();
+                    continue;
+                }
                 cout << "Cantidad de unidades: "; cin >> cant;
                 
                 int fabricados = miInventario.producir(id, cant, miAlmacen);
