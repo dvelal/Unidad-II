@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 #include <limits>
-#include "Receta.h"
-#include "Producto.h" 
-#include "Venta.h"
+#include "Cabeceras/Receta.h"
+#include "Cabeceras/Producto.h" 
+#include "Cabeceras/Venta.h"
 
 using namespace std;
 
