@@ -3,7 +3,6 @@
 class Torta : public Producto{
     private: 
         int maxPorciones;
-        
         //Receta * receta;
     public:
         Torta();

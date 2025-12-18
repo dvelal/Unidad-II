@@ -129,6 +129,7 @@ class Inventario{
         void mostrarProductos();
         void guardarProductos();
         void cargarProductos();
+        void mostrarBajoMinimo();
         //Producto* accederProductoPorId(std::string id);
 };
 
@@ -247,7 +248,12 @@ void Inventario::guardarProductos(){
     guardar.close();
 }
 
-
+void Inventario::mostrarBajoMinimo(){
+    for(auto &x : productos){
+        if(x.second->estaBajoMinimo())
+        x.second->mostrarDatos();
+    }
+}
 
 
 

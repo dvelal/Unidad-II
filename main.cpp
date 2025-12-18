@@ -95,8 +95,7 @@ int main(){
                             break;
                             }
                             case '4':{//////mostrar producto bajo minimo
-
-                                //inventario.actualizarStock();
+                                inventario.mostrarBajoMinimo();
                                 
                                 
                                 break;
