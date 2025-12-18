@@ -137,12 +137,15 @@ int main() {
                 do {
                     miInventario.mostrarProductos();
                     cout << "\nIngrese ID del producto: "; cin >> id;
-                    cout << "Cantidad a vender: "; cin >> cant;
-                    
                     Producto* p = miInventario.buscarPorId(id);
                     if(p) {
-                        nuevaVenta.agregarItem(p, cant);
-                        cout << "[+] Agregado. Otro producto? (s/n): "; cin >> mas;
+                    cout << "Cantidad a vender: "; cin >> cant;
+                        if(p->getStockActual()>= cant){
+                            nuevaVenta.agregarItem(p, cant);
+                            cout << "[+] Agregado. Otro producto? (s/n): "; cin >> mas;
+                        }else {
+                            cout<<"No hay stock suficiente. Reintentar? (s/n) "; cin>>mas;
+                        }
                     } else {
                         cout << "[!] ID no existe. Reintentar? (s/n): "; cin >> mas;
                     }
