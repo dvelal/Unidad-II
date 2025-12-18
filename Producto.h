@@ -63,9 +63,6 @@ void Producto::mostrarDatos(){
     std::cout<<"ID: "<<idProducto;
     std::cout<<std::left<<" Producto: "<<std::setw(20)<<nombre;
     std::cout<<"  Stock: "<<std::setw(5)<<stockActual;;
-    if(estaBajoMinimo()){
-        std::cout<<"\tHay que reponer el producto";
-    }
 }
 int Producto::getStockActual(){ return stockActual; }
 int Producto::getStockMinimo(){ return stockMinimo; }
@@ -131,7 +128,7 @@ void Torta::actualizarStock(int cant){
 }
 void Torta::mostrarDatos(){
     Producto::mostrarDatos();
-    std::cout<<" N de porciones: "<<maxPorciones;
+    std::cout<<" N de porciones: "<<std::left<<std::setw(2)<<maxPorciones;
     std::cout<<" Precio: " << precio<<std::endl;
 }
 std::string Torta::ssdatos(){
