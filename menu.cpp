@@ -142,7 +142,8 @@ int main() {
                 
                 do {
                     miInventario.mostrarProductos();
-                    cout << "\nIngrese ID del producto: "; cin >> id;
+                    cout << "\nIngrese ID del producto: (0 para salir) "; cin >> id;
+                    if(id == "0") break;
                     Producto* p = miInventario.buscarPorId(id);
                     if(p) {
                     cout << "Cantidad a vender: "; cin >> cant;
@@ -156,17 +157,18 @@ int main() {
                         cout << "[!] ID no existe. Reintentar? (s/n): "; cin >> mas;
                     }
                 } while (mas == 's' || mas == 'S');
-
                 limpiarPantalla();
-                if(nuevaVenta.confirmarVenta()) {
-                    cout << "========================================" << endl;
-                    cout << "          VENTA CONFIRMADA             " << endl;
-                    nuevaVenta.mostrarVenta();
-                } else {
-                    cout << "\n[DENEGADO] No hay suficiente stock de tortas para completar el pedido." << endl;
-                }
-                pausar();
-                break;
+                if(mas!='0'){break;}
+
+                    if(nuevaVenta.confirmarVenta()) {
+                        cout << "========================================" << endl;
+                        cout << "          VENTA CONFIRMADA             " << endl;
+                        nuevaVenta.mostrarVenta();
+                    } else {
+                        cout << "\n[DENEGADO] No hay suficiente stock de tortas para completar el pedido." << endl;
+                    }
+                    pausar();
+                    break;
             }
 
             case 6: {
