@@ -1,32 +1,52 @@
+#pragma once
 #include"Producto.h"
+#include<iostream>
+#include<cstring>
+#include<sstream>
+using namespace std;
 class ItemVenta {
     private:
-        Producto producto;
+        Producto *producto;
         int cantidad;
         float subTotal;
 
     public:
-        ItemVenta(Producto p, int c);
+        ItemVenta(Producto *p, int c);
+        //calculos y otros
         float calcularSubtotal();
-        Producto getProducto();
+        string datosItemVenta();
+        //getters
+        Producto* getProducto();
         int getCantidad();
+        float getSubtotal();
+        //setters
+        
 };
 
-
-ItemVenta::ItemVenta(Producto p, int c) {
+ItemVenta::ItemVenta(Producto *p, int c) {
     producto = p;
     cantidad = c;
     calcularSubtotal();
 }
-void ItemVenta::calcularSubtotal() {
-    subtotal = cantidad * producto.getPrecio();
+float ItemVenta::calcularSubtotal() {
+    subTotal = cantidad * producto->getPrecio();
 }
-Producto ItemVenta::getProducto() {
+std::string ItemVenta::datosItemVenta(){
+    string datos;
+    stringstream ss;
+    ss << to_string(cantidad)
+       << producto->getIdProducto()
+       << producto->getNombre()
+       << producto->getPrecio()
+       << to_string(calcularSubtotal());
+    return ss.str();
+}
+Producto* ItemVenta::getProducto() {
     return producto;
 }
 int ItemVenta::getCantidad() {
     return cantidad;
 }
 float ItemVenta::getSubtotal() {
-    return subtotal;
+    return subTotal;
 }
