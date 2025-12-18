@@ -9,6 +9,7 @@
 
 using namespace std;
 
+
 class ItemVenta {
     private:
         Producto* producto;
@@ -17,7 +18,6 @@ class ItemVenta {
 
     public:
         ItemVenta(Producto* p, int c);
-
         Producto* getProducto();
         int getCantidad();
         float getSubtotal();
@@ -29,17 +29,10 @@ ItemVenta::ItemVenta(Producto* p, int c) {
     subTotal = cantidad * producto->getPrecio();
 }
 
-Producto* ItemVenta::getProducto() {
-    return producto;
-}
+Producto* ItemVenta::getProducto() { return producto; }
+int ItemVenta::getCantidad() { return cantidad; }
+float ItemVenta::getSubtotal() { return subTotal; }
 
-int ItemVenta::getCantidad() {
-    return cantidad;
-}
-
-float ItemVenta::getSubtotal() {
-    return subTotal;
-}
 
 class Venta {
     private:
@@ -60,12 +53,10 @@ class Venta {
         void agregarItem(Producto* p, int cantidad);
         bool confirmarVenta();
         void cancelarVenta();
-        void mostrarVenta();
+        void mostrarVenta(); 
 
         static void buscarBoletaPorId(int id);
-    };
-
-
+};
 
 Venta::Venta(string f, string h) {
     fecha = f;
@@ -75,20 +66,17 @@ Venta::Venta(string f, string h) {
     idVenta = obtenerId() + 1;
 }
 
-int Venta::getIdVenta() {
-    return idVenta;
-}
+int Venta::getIdVenta() { return idVenta; }
 
 void Venta::agregarItem(Producto* p, int cantidad) {
-    if (cantidad <= 0) return;
+    if (cantidad <= 0 || p == nullptr) return;
     items.emplace_back(p, cantidad);
 }
 
 bool Venta::confirmarVenta() {
     for (auto& it : items) {
         if (it.getProducto()->getStockActual() < it.getCantidad()) {
-            cout << "Stock insuficiente\n";
-            return false;
+            return false; 
         }
     }
 
@@ -113,23 +101,29 @@ void Venta::cancelarVenta() {
 }
 
 void Venta::mostrarVenta() {
-    cout << "VENTA " << idVenta << endl;
-    cout << "Fecha: " << fecha << " Hora: " << hora << endl;
+    cout << "\n================================" << endl;
+    cout << "VENTA #" << idVenta << endl;
+    cout << "Fecha: " << fecha << " | Hora: " << hora << endl;
     cout << "Estado: " << (cancelada ? "CANCELADA" : "CONFIRMADA") << endl;
-
+    cout << "--------------------------------" << endl;
+    
     for (auto& it : items) {
-        cout << it.getProducto()->getNombre()
-             << " x" << it.getCantidad()
-             << " = " << it.getSubtotal() << endl;
+        cout << left << setw(15) << it.getProducto()->getNombre()
+             << " x" << setw(3) << it.getCantidad()
+             << " | Subt: $" << fixed << setprecision(2) << it.getSubtotal() << endl;
     }
 
-    cout << "TOTAL: " << total << endl;
+    cout << "--------------------------------" << endl;
+    cout << "TOTAL: $" << total << endl;
+    cout << "================================\n" << endl;
 }
 
 int Venta::obtenerId() {
     ifstream file("BOLETAS/ventas.txt");
     string linea;
     int ultimoId = 0;
+
+    if(!file.is_open()) return 0;
 
     while (getline(file, linea)) {
         if (linea.find("VENTA ") == 0) {
@@ -138,33 +132,33 @@ int Venta::obtenerId() {
             ss >> palabra >> ultimoId;
         }
     }
-
+    file.close();
     return ultimoId;
 }
 
 void Venta::guardarBoleta() {
     ofstream boleta("BOLETAS/ventas.txt", ios::app);
 
+    if (!boleta.is_open()) {
+        cout << "[ERROR] No se pudo acceder a BOLETAS/ventas.txt" << endl;
+        return;
+    }
+
     boleta << "VENTA " << idVenta << endl;
     boleta << "FECHA " << fecha << endl;
     boleta << "HORA " << hora << endl;
-
-    if (cancelada)
-        boleta << "ESTADO CANCELADA" << endl;
-    else
-        boleta << "ESTADO CONFIRMADA" << endl;
+    boleta << "ESTADO " << (cancelada ? "CANCELADA" : "CONFIRMADA") << endl;
 
     boleta << fixed << setprecision(2);
-
-    boleta << "PRODUCTOS: " << endl;
+    boleta << "PRODUCTOS:" << endl;
     for (auto& it : items) {
-      boleta << it.getProducto()->getNombre() << " "
-             << it.getCantidad() << " "
-             << it.getSubtotal() << endl;
+      boleta << "- " << left << setw(15) << it.getProducto()->getNombre() << " "
+             << "cant: " << it.getCantidad() << " "
+             << "subt: " << it.getSubtotal() << endl;
     }
 
     boleta << "TOTAL " << total << endl;
-    boleta << "END\n\n";
+    boleta << "END" << endl << endl;
 
     boleta.close();
 }
@@ -174,13 +168,23 @@ void Venta::buscarBoletaPorId(int id) {
     string linea;
     bool mostrar = false;
 
+    if(!file.is_open()) {
+        cout << "No hay registro de ventas." << endl;
+        return;
+    }
+
+    cout << "\n--- RESULTADO DE BUSQUEDA ---" << endl;
     while (getline(file, linea)) {
         if (linea == "VENTA " + to_string(id))
             mostrar = true;
 
         if (mostrar) {
             cout << linea << endl;
-            if (linea == "END") break;
+            if (linea == "END") {
+                mostrar = false;
+                break; 
+            }
         }
     }
+    file.close();
 }

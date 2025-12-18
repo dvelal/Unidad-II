@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <iomanip>
+
 using namespace std;
 
 struct ItemReceta {
@@ -27,19 +28,12 @@ class Insumo {
         void reponer(float cantidad);
 };
 
-Insumo :: Insumo (const string& nombre, float stockInicio, const string& unidad) : nombre(nombre), stock(stockInicio), unidad(unidad) {}
+Insumo :: Insumo (const string& nombre, float stockInicio, const string& unidad) 
+    : nombre(nombre), stock(stockInicio), unidad(unidad) {}
 
-string Insumo :: getNombre() const {
-    return nombre;
-}
-
-float Insumo :: getStock() const {
-    return stock;
-}
-
-string Insumo :: getUnidad() const {
-    return unidad;
-}
+string Insumo :: getNombre() const { return nombre; }
+float Insumo :: getStock() const { return stock; }
+string Insumo :: getUnidad() const { return unidad; }
 
 bool Insumo :: consumir(float cantidad){
     if(stock < cantidad){
@@ -61,7 +55,7 @@ class Almacen {
         void cargarBase();
         void guardarBase();
         void mostrarInsumos();
-        void reponerInsumos(const string& nombreInsumo, float cantidad);
+        void reponerInsumos(const string& nombreInsumo, float cantidad, string unidad);
         bool hayStock(const string& nombreInsumo, float cantidad) const;
         bool descontar(const string& nombreInsumo, float cantidad);
 };
@@ -70,6 +64,7 @@ void Almacen :: cargarBase(){
     ifstream Insumos;
     Insumos.open("Insumos.txt");
     if(Insumos.is_open()){
+        insumos.clear(); 
         string nom;
         float stocks;
         string unidad;
@@ -78,7 +73,7 @@ void Almacen :: cargarBase(){
         }
         Insumos.close();
     } else {
-        cout << "No se puedo abrir el archivo de insumos\n";
+        cout << "No se pudo abrir el archivo de insumos\n";
     }
 }
 
@@ -98,26 +93,28 @@ void Almacen :: mostrarInsumos() {
     cout << "Lista de Insumos: \n";
     for(const Insumo& insumo : insumos){
         cout << "\t";
-        cout << left << setw(20) << insumo.getNombre() << left << setw(4) << insumo.getStock() << left << setw(4) << insumo.getUnidad() << endl;
+        cout << left << setw(20) << insumo.getNombre() << left << setw(8) << insumo.getStock() << left << setw(4) << insumo.getUnidad() << endl;
     }
 }
 
-void Almacen :: reponerInsumos(const string& nombreInsumo, float cantidad){
+void Almacen :: reponerInsumos(const string& nombreInsumo, float cantidad, string unidad){
+    bool encontrado = false;
     for(Insumo& insumo : insumos){
         if (insumo.getNombre() == nombreInsumo){
             insumo.reponer(cantidad);
+            encontrado = true;
+            break;
         }
+    }
+    if(!encontrado){
+        insumos.push_back(Insumo(nombreInsumo, cantidad, unidad));
     }
 }
 
 bool Almacen :: hayStock(const string& nombreInsumo, float cantidad) const {
     for (const Insumo& insumo : insumos){
         if(insumo.getNombre() == nombreInsumo){
-            if (insumo.getStock() >= cantidad){
-                return true;
-            } else {
-                return false;
-            }
+            return insumo.getStock() >= cantidad;
         }
     }
     return false;
@@ -134,6 +131,7 @@ bool Almacen :: descontar(const string& nombreInsumo, float cantidad){
 
 class Receta {
     private:
+        int idReceta = 0;
         string nombreProducto;
         vector<ItemReceta> items;
     public:
@@ -166,13 +164,16 @@ bool Receta :: producir(Almacen& almacen){
     bool faltantes = false;
     for(const ItemReceta& item : items){
         if(!almacen.hayStock(item.nombreInsumo, item.cantidadUtil)){
-            cout << "Falta insumo: " << item.nombreInsumo << endl;
+            cout << "[ERROR] Falta insumo: " << item.nombreInsumo 
+                 << " (Necesario: " << item.cantidadUtil << ")" << endl;
             faltantes = true;
         }
     }
+    
     if(faltantes){
         return false;
     }
+    
     for(const ItemReceta& item : items){
         almacen.descontar(item.nombreInsumo, item.cantidadUtil);
     }
@@ -191,12 +192,11 @@ void Receta :: crearReceta(){
     string ruta = "RECETAS/" + nombreProducto + ".txt";
     ofstream RecetProduc(ruta);
     if(RecetProduc.is_open()){
-        for(ItemReceta& item : items){
+        for(const ItemReceta& item : items){
             RecetProduc << item.nombreInsumo << " " << item.cantidadUtil << " " << item.unidad << endl;
         }
         RecetProduc.close();
     } else {
-        cout << "No se pudo crear Receta\n";
+        cout << "No se pudo crear el archivo de Receta en la carpeta RECETAS/\n";
     } 
 }
-

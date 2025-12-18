@@ -1,0 +1,6 @@
+Harina 0.6 kg
+Azucar 0.2 kg
+Huevos 2.0 unidades
+Cafe 0.1 kg
+Mantequilla 0.2 kg
+PolvoHorno 0.05 kg

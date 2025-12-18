@@ -1,0 +1,6 @@
+Harina 0.4 kg
+Azucar 0.3 kg
+Huevos 6.0 unidades
+Leche 1.5 litros
+CremaLeche 0.5 litros
+Vainilla 0.1 litros
