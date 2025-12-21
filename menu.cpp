@@ -166,7 +166,7 @@ int main() {
                     }
                 } while (mas == 's' || mas == 'S');
                 limpiarPantalla();
-                if(mas!='0'){break;}
+                if(mas=='0'){break;}
 
                     if(nuevaVenta.confirmarVenta()) {
                         cout << "========================================" << endl;
